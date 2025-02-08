@@ -1,23 +1,16 @@
-const http = require('http');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const movieRoutes = require('./routes/movies');
 
-const hostname = '0.0.0.0';
-const port = 3000;
+const app = express();
 
-const server = http.createServer((req, res) => {
-  res.setHeader('Content-Type', 'text/plain');
+app.use(bodyParser.json());
+app.use(cors());
 
-  if (req.method === 'GET' && req.url === '/') {
-    res.statusCode = 200;
-    res.end('Welcome to the home page!');
-  } else if (req.method === 'GET' && req.url === '/about') {
-    res.statusCode = 200;
-    res.end('This is the about page.');
-  } else {
-    res.statusCode = 404;
-    res.end('Page not found');
-  }
-});
+app.use('/api', movieRoutes);
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+const PORT = 8000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
