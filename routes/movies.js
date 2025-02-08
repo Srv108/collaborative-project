@@ -10,9 +10,27 @@ const readData = () => {
     return JSON.parse(data);
 };
 
+const writeData = (data) => {
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+};
+
 router.get('/movies', (req, res) => {
     const movies = readData();
     res.json(movies);
+});
+
+router.post('/movies', (req, res) => {
+    const movies = readData();
+    const newMovie = {
+        id: movies.length + 1,
+        title: req.body.title,
+        genre: req.body.genre,
+        duration: req.body.duration,
+        releaseDate: req.body.releaseDate
+    };
+    movies.push(newMovie);
+    writeData(movies);
+    res.status(201).json(newMovie);
 });
 
 module.exports = router;
